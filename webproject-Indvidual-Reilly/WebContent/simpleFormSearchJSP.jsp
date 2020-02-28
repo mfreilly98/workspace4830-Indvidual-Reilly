@@ -26,7 +26,7 @@
 		Connection connection = null;
 
 		try {
-			connection = DriverManager.getConnection("jdbc:mysql://my.server.net:3306/myDB", "mysql remote user id", "mysql password");
+			connection = DriverManager.getConnection("jdbc:mysql://ec2-18-188-36-127.us-east-2.compute.amazonaws.com:3306/toDoList", "newmysqlremoteuser", "mypassword");
 		} catch (SQLException e) {
 			System.out.println("Connection Failed! Check output console");
 			e.printStackTrace();
@@ -46,34 +46,31 @@
 			connection.setAutoCommit(false);
 
 			if (keyword.isEmpty()) {
-				String selectSQL = "SELECT * FROM myTable";
+				String selectSQL = "SELECT * FROM toDoList";
 				query = connection.prepareStatement(selectSQL);
 			} else {
-				String selectSQL = "SELECT * FROM myTable WHERE MYUSER LIKE ?";
-				String theUserName = keyword + "%";
+				String selectSQL = "SELECT * FROM toDoList WHERE MYUSER LIKE ?";
+				String Activity = keyword + "%";
 				query = connection.prepareStatement(selectSQL);
-				query.setString(1, theUserName);
+				query.setString(1, Activity);
 			}
 			
-			//String qSql = "SELECT * FROM myTable";
+			//String qSql = "SELECT * FROM toDoList";
 			//query = connection.prepareStatement(qSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			ResultSet rs = query.executeQuery();
 			while (rs.next()) {
-				int id = rs.getInt("id");
-				String userName = rs.getString("myuser").trim();
-				String email = rs.getString("email").trim();
-				String phone = rs.getString("phone").trim();
+				int NUM = rs.getInt("NUM");
+				String ACTIVITY = rs.getString("ACTIVITY").trim();
+				String DUE = rs.getString("DUE").trim();
 
 				// Display values to console.
-				System.out.println("ID: " + id + ", ");
-				System.out.println("User: " + userName + ", ");
-				System.out.println("Email: " + email + ", ");
-				System.out.println("Phone: " + phone + "<br>");
+				System.out.println("#: " + NUM + ", ");
+				System.out.println("Task to do: " + ACTIVITY + ", ");
+				System.out.println("Due Date: " + DUE + "<br>");
 				// Display values to webpage.
-				sb.append("ID: " + id + ", ");
-				sb.append("User: " + userName + ", ");
-				sb.append("Email: " + email + ", ");
-				sb.append("Phone: " + phone + "<br>");
+				sb.append("#: " + NUM + ", ");
+				sb.append("Task to Do: " + ACTIVITY + ", ");
+				sb.append("Due Date: " + DUE + "<br>");
 			}
 			connection.close();
 		} catch (Exception e) {
@@ -82,6 +79,6 @@
 		return sb.toString();
 	}%>
 
-	<a href=/webproject/simpleFormSearchJSP.html>Search Data</a> <br>
+	<a href=/webproject-Indvidual-Reilly/simpleFormSearchJSP.html>Search List</a> <br>
 </body>
 </html>

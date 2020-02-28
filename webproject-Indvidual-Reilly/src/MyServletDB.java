@@ -14,9 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/MyServletDB")
 public class MyServletDB extends HttpServlet {
    private static final long serialVersionUID = 1L;
-   static String url = "jdbc:mysql://YOUR AWS EC2 SERVER URL:3306/YOUR MYSQL DB INSTANCE NAME";
-   static String user = "YOUR REMOTE MYSQL USER ID";
-   static String password = "YOUR REMOTE MYSQL USER PASSWORD";
+   static String url = "jdbc:mysql://ec2-18-188-36-127.us-east-2.compute.amazonaws.com:3306/toDoList";
+   static String user = "newmysqlremoteuser";
+   static String password = "mypassword";
    static Connection connection = null;
 
    public MyServletDB() {
@@ -27,7 +27,7 @@ public class MyServletDB extends HttpServlet {
       response.setContentType("text/html;charset=UTF-8");
       response.getWriter().println("-------- MySQL JDBC Connection Testing ------------<br>");
       try {
-         Class.forName("com.mysql.cj.jdbc.Driver");//("com.mysql.jdbc.Driver");
+         Class.forName("com.mysql.jdbc.Driver");
       } catch (ClassNotFoundException e) {
          System.out.println("Where is your MySQL JDBC Driver?");
          e.printStackTrace();
@@ -48,7 +48,7 @@ public class MyServletDB extends HttpServlet {
          System.out.println("Failed to make connection!");
       }
       try {
-         String selectSQL = "SELECT * FROM myTable";// WHERE MYUSER LIKE ?";
+         String selectSQL = "SELECT * FROM toDoList";// WHERE MYUSER LIKE ?";
 //         String theUserName = "user%";
          response.getWriter().println(selectSQL + "<br>");
          response.getWriter().println("------------------------------------------<br>");
@@ -56,14 +56,13 @@ public class MyServletDB extends HttpServlet {
 //         preparedStatement.setString(1, theUserName);
          ResultSet rs = preparedStatement.executeQuery();
          while (rs.next()) {
-            String id = rs.getString("ID");
-            String username = rs.getString("MYUSER");
-            String email = rs.getString("EMAIL");
-            String phone = rs.getString("PHONE");
-            response.getWriter().append("USER ID: " + id + ", ");
-            response.getWriter().append("USER NAME: " + username + ", ");
-            response.getWriter().append("USER EMAIL: " + email + ", ");
-            response.getWriter().append("USER PHONE: " + phone + "<br>");
+            String NUM = rs.getString("NUM");
+            String ACTIVITY = rs.getString("ACTIVITY");
+            String DUE = rs.getString("DUE");
+         
+            response.getWriter().append("#: " + NUM + ", ");
+            response.getWriter().append("Task to do: " + ACTIVITY + ", ");
+            response.getWriter().append("Due Date: " + DUE + "<br>");
          }
       } catch (SQLException e) {
          e.printStackTrace();

@@ -43,30 +43,28 @@ public class SimpleFormSearch extends HttpServlet {
          connection = DBConnection.connection;
 
          if (keyword.isEmpty()) {
-            String selectSQL = "SELECT * FROM myTable";
+            String selectSQL = "SELECT * FROM toDoList";
             preparedStatement = connection.prepareStatement(selectSQL);
          } else {
-            String selectSQL = "SELECT * FROM myTable WHERE MYUSER LIKE ?";
-            String theUserName = keyword + "%";
+            String selectSQL = "SELECT * FROM toDoList;";
+            String theActivity = keyword + "%";
             preparedStatement = connection.prepareStatement(selectSQL);
-            preparedStatement.setString(1, theUserName);
+            preparedStatement.setString(1, theActivity);
          }
          ResultSet rs = preparedStatement.executeQuery();
 
          while (rs.next()) {
-            int id = rs.getInt("id");
-            String userName = rs.getString("myuser").trim();
-            String email = rs.getString("email").trim();
-            String phone = rs.getString("phone").trim();
+            int num = rs.getInt("NUM");
+            String activity = rs.getString("ACTIVITY").trim();
+            String due = rs.getString("DUE").trim();
 
-            if (keyword.isEmpty() || userName.contains(keyword)) {
-               out.println("ID: " + id + ", ");
-               out.println("User: " + userName + ", ");
-               out.println("Email: " + email + ", ");
-               out.println("Phone: " + phone + "<br>");
+            if (keyword.isEmpty() || activity.contains(keyword)) {
+               out.println("#: " + num + ", ");
+               out.println("Task to do: " + activity + ", ");
+               out.println("Due Date: " + due + "<br>");
             }
          }
-         out.println("<a href=/webproject/simpleFormSearch.html>Search Data</a> <br>");
+         out.println("<a href=/webproject-Indvidual-Reilly/simpleFormSearch.html>Search Data</a> <br>");
          out.println("</body></html>");
          rs.close();
          preparedStatement.close();

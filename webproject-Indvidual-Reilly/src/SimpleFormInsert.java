@@ -22,20 +22,18 @@ public class SimpleFormInsert extends HttpServlet {
    }
 
    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      String userName = request.getParameter("userName");
-      String email = request.getParameter("email");
-      String phone = request.getParameter("phone");
+      String ACTIVITY = request.getParameter("ACTIVITY");
+      String DUE = request.getParameter("DUE");
 
       Connection connection = null;
-      String insertSql = " INSERT INTO myTable (id, MYUSER, EMAIL, PHONE) values (default, ?, ?, ?)";
+      String insertSql = " INSERT INTO toDoList (NUM, ACTIVITY, DUE) values (default, ?, ?)";
 
       try {
          DBConnection.getDBConnection(getServletContext());
          connection = DBConnection.connection;
          PreparedStatement preparedStmt = connection.prepareStatement(insertSql);
-         preparedStmt.setString(1, userName);
-         preparedStmt.setString(2, email);
-         preparedStmt.setString(3, phone);
+         preparedStmt.setString(1, ACTIVITY);
+         preparedStmt.setString(2, DUE);
          preparedStmt.execute();
          connection.close();
       } catch (Exception e) {
@@ -45,7 +43,7 @@ public class SimpleFormInsert extends HttpServlet {
       // Set response content type
       response.setContentType("text/html");
       PrintWriter out = response.getWriter();
-      String title = "Insert Data to DB table";
+      String title = "Insert Task to List to Do";
       String docType = "<!doctype html public \"-//w3c//dtd html 4.0 " + "transitional//en\">\n";
       out.println(docType + //
             "<html>\n" + //
@@ -54,13 +52,12 @@ public class SimpleFormInsert extends HttpServlet {
             "<h2 align=\"center\">" + title + "</h2>\n" + //
             "<ul>\n" + //
 
-            "  <li><b>User Name</b>: " + userName + "\n" + //
-            "  <li><b>Email</b>: " + email + "\n" + //
-            "  <li><b>Phone</b>: " + phone + "\n" + //
+            "  <li><b>Task to Do</b>: " + ACTIVITY + "\n" + //
+            "  <li><b>Due Date</b>: " + DUE + "\n" + //
 
             "</ul>\n");
 
-      out.println("<a href=/webproject/simpleFormSearch.html>Search Data</a> <br>");
+      out.println("<a href=/webproject-Indvidual-Reilly/simpleFormSearch.html>Search List</a> <br>");
       out.println("</body></html>");
    }
 
